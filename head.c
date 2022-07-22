@@ -86,15 +86,17 @@ void commandLine() {
         write(STDOUT_FILENO, buffer, n);
     } else {
         // reads and writes standard input back with specified line number
-        char buffer[1000000];
-        for(int i = 0; i < lines; i++) {
-            n = read(STDIN_FILENO, buffer, 1000000);
+        char* buffer = calloc(1000000, sizeof(char));
+        int lineCounter = 0;
+        while(lineCounter < lines && (n = read(STDIN_FILENO, buffer, bytes)) > 0) {
+            write(STDOUT_FILENO, buffer, n);
+            lineCounter++;
             // checks for errors with reading from standard input
             if(n == -1) {
                 perror("read");
             } // if
-            write(STDOUT_FILENO, buffer, n);
-        } // for
+        } // while
+        free(buffer);
     } // if
 } // commandLine
 
