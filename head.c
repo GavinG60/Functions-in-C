@@ -29,43 +29,44 @@ int main(int argc, char* argv[]) {
     // Check if argv[1] is -c or -n and change lines or bytes variable accordingly
     if(argc == 1) {
         commandLine();
-    } // if
-    if(strcmp(argv[1], "-n") == 0) {
-        int num = atoi(argv[2]);
-        lines = num;
-        specifier = 3;
-    } else if(strcmp(argv[1], "-c") == 0) {
-        int num = atoi(argv[2]);
-        bytes = num;
-        specifier = 3;
-        status = 1;
-    } // if
-    // reads from standard input if there is no argument
-    if(specifier == 3 && argc == 3) {
-        commandLine();
     } else {
-    // reads each command-line argument, skipping the specificer if there is one
-        for(int i = specifier; i < argc; i++) {
-            if(*argv[i] == '-') {
-                if(argc > 4) {
-                    setbuf(stdout, NULL);
-                    if(i != specifier) {
-                        printf("\n");
+        if(strcmp(argv[1], "-n") == 0) {
+            int num = atoi(argv[2]);
+            lines = num;
+            specifier = 3;
+        } else if(strcmp(argv[1], "-c") == 0) {
+            int num = atoi(argv[2]);
+            bytes = num;
+            specifier = 3;
+            status = 1;
+        } // if
+        // reads from standard input if there is no argument
+        if(specifier == 3 && argc == 3) {
+            commandLine();
+        } else {
+            // reads each command-line argument, skipping the specificer if there is one
+            for(int i = specifier; i < argc; i++) {
+                if(*argv[i] == '-') {
+                    if(argc > 4) {
+                        setbuf(stdout, NULL);
+                        if(i != specifier) {
+                            printf("\n");
+                        } // if
+                        printf("==> standard input <==\n");
                     } // if
-                    printf("==> standard input <==\n");
-                } // if
-                commandLine();
-            } else {
-                if(argc > 4 || ((specifier == 1) && (argc > 2))) {
-                    setbuf(stdout, NULL);
-                    if(i != specifier) {
-                        printf("\n");
+                    commandLine();
+                } else {
+                    if(argc > 4 || ((specifier == 1) && (argc > 2))) {
+                        setbuf(stdout, NULL);
+                        if(i != specifier) {
+                            printf("\n");
+                        } // if
+                        printf("==> %s <==\n", argv[i]);
                     } // if
-                    printf("==> %s <==\n", argv[i]);
+                    readFile(i, argv);
                 } // if
-                readFile(i, argv);
-            } // if
-        } // for
+            } // for
+        } // if
     } // if
 } // main
 
